@@ -1,0 +1,12 @@
+[submodule "sources/meta-intel-fpga-refdes"]
+	path = sources/meta-intel-fpga-refdes
+	url = https://github.com/altera-fpga/meta-intel-fpga-refdes.git
+[submodule "sources/meta-intel-fpga"]
+	path = sources/meta-intel-fpga
+	url = https://git.yoctoproject.org/meta-intel-fpga
+[submodule "sources/meta-openembedded"]
+	path = sources/meta-openembedded
+	url = https://github.com/openembedded/meta-openembedded.git
+[submodule "sources/poky"]
+	path = sources/poky
+	url = git://git.yoctoproject.org/poky
