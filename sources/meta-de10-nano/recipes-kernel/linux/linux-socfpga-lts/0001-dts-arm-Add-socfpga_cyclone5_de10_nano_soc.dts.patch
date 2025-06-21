@@ -1,0 +1,127 @@
+From faaa718f62cd8eb982737de6916c9c8342fcdf69 Mon Sep 17 00:00:00 2001
+From: Dario Mylonopoulos <dmylos@yahoo.it>
+Date: Sat, 21 Jun 2025 19:49:52 +0200
+Subject: [PATCH] dts: arm: Add socfpga_cyclone5_de10_nano_soc.dts
+
+---
+ .../socfpga_cyclone5_de10_nano_soc.dts        | 111 ++++++++++++++++++
+ 1 file changed, 111 insertions(+)
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts
+
+diff --git a/arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts b/arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts
+new file mode 100644
+index 000000000000..1ec91f4bc453
+--- /dev/null
++++ b/arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright Altera Corporation (C) 2015. All rights reserved.
++ */
++
++#include "socfpga_cyclone5.dtsi"
++
++/ {
++	model = "Terasic DE10-Nano";
++	compatible = "altr,socfpga-cyclone5", "altr,socfpga";
++
++	chosen {
++		bootargs = "earlyprintk";
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory@0 {
++		name = "memory";
++		device_type = "memory";
++		reg = <0x0 0x40000000>; /* 1GB */
++	};
++
++	aliases {
++		ethernet0 = &gmac1;
++	};
++
++	regulator_3_3v: regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "3.3V";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		led-hps0 {
++			label = "hps_led0";
++			gpios = <&portb 24 0>;
++			linux,default-trigger = "heartbeat";
++		};
++	};
++
++	keys {
++		compatible = "gpio-keys";
++		hps0 {
++			label = "hps_key0";
++			gpios = <&portb 25 0>;
++			linux,code = <63>;
++			debounce-interval = <50>;
++		};
++	};
++};
++
++&gmac1 {
++	status = "okay";
++	phy-mode = "rgmii";
++
++	txd0-skew-ps = <0>; /* -420ps */
++	txd1-skew-ps = <0>; /* -420ps */
++	txd2-skew-ps = <0>; /* -420ps */
++	txd3-skew-ps = <0>; /* -420ps */
++	rxd0-skew-ps = <420>; /* 0ps */
++	rxd1-skew-ps = <420>; /* 0ps */
++	rxd2-skew-ps = <420>; /* 0ps */
++	rxd3-skew-ps = <420>; /* 0ps */
++	txen-skew-ps = <0>; /* -420ps */
++	txc-skew-ps = <1860>; /* 960ps */
++	rxdv-skew-ps = <420>; /* 0ps */
++	rxc-skew-ps = <1680>; /* 780ps */
++
++	max-frame-size = <3800>;
++};
++
++&gpio0 {
++	status = "okay";
++};
++
++&gpio1 {
++	status = "okay";
++};
++
++&gpio2 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++	clock-frequency = <100000>;
++
++	adxl345: adxl345@53 {
++		compatible = "adi,adxl345";
++		reg = <0x53>;
++
++		interrupt-parent = <&portc>;
++		interrupts = <3 2>;
++	};
++};
++
++&mmc0 {
++	vmmc-supply = <&regulator_3_3v>;
++	vqmmc-supply = <&regulator_3_3v>;
++	status = "okay";
++};
++
++&uart0 {
++	status = "okay";
++};
++
++&usb1 {
++	status = "okay";
++};

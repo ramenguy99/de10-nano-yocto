@@ -1,0 +1,10 @@
+fatls mmc 0:1;
+if test -e mmc 0:1 soc_system.rbf; then
+    echo -- FOUND soc_system.rbf --;
+    load mmc 0:1 ${loadaddr} soc_system.rbf;
+    fpga load 0 ${loadaddr} $filesize;
+else
+    echo -- NOT FOUND soc_system.rbf --;
+fi;
+echo -- scanning for extlinux --;
+run scan_dev_for_extlinux

@@ -28,7 +28,7 @@ bitbake console-image-minimal
 
 #### Interesting config:
 - WKS_FILE: for configuring partition layout
-- IMAGE_BOOT_FILES: contents of /boot (i assume?)
+- IMAGE_BOOT_FILES: contents of /boot -> carefull this does no rerun if some files change (tested with u-boot.scr).
 
 #### TODO:
 - [x] fix absolute paths for bbmask in layer.conf
@@ -48,16 +48,40 @@ bitbake console-image-minimal
       - build without design and try to flash from running board
       - make and test our own design
       - check if we can reflash at runtime, maybe adding/removing device overlays for hot-pluggable devices
-- [ ] make my own layer
-- [ ] gitignore + commit to git in a way that it's easy to reproduce stuff (e.g. submodules + build/conf)
+- [x] gitignore + commit to git in a way that it's easy to reproduce stuff (e.g. submodules + build/conf)
+- [x] make my own layer
 - [ ] explore:
-    [x] how to configure uboot -> currently dropping into shell, also not sure how to edit environment and ensure script is running
-      - CONFIG: easiest way is to patch it to add / modify a defconfig, in our case it's the defconfig
+    - how to configure uboot -> currently dropping into shell, also not sure how to edit environment and ensure script is running
+      - CONFIG: easiest way is to patch it to add / modify a defconfig, in our case it's the de-nano10-soc_defconfig
       - ENV: use CONFIG_ENV_SOURCE_FILE to provide our own source (example of this in u-boot-socfpga-env)
-      - SCRIPT: use CON
-    [x] how to patch kernel -> devtool allows to edit -> TODO: check how to store patch somehow (devtool again?)
-  - how to edit kernel config, change device tree (and/or add overlays), add kernel modules and create new images (likely from our layer)
-- [ ] customize partition layout with WKS_FILE -> check sd card size
+        - notes on boot environment:
+          - at compile time:
+            - a version of the environment is baked into the u-boot partition
+            - this version can also be reloaded with env default -a
+            - this comes from a .env file in uboot source (defined per board)
+            - otherwise from the C source (known as old method in the docs)
+            - check if we can use this mechanism to customize the environment, and if we can specify only some -> complex because it requires multiple files to define a board
+            - decided to use a uboot.env file generated with mkenvimage and manually flash it
+          - with script:
+            - the environment can also be sourced from a file by u-boot. Not sure how to configure this yet.
+          - at runtime:
+            - boot environment for us lives on MMC, this is set by CONFIG_ENV_IS_IN_MMC (other media exists)
+            - where exactly depends on CONFIG_ENV_OFFSET and CONFIG_ENV_SIZE (meaning depends on media, for MMC is absolute in bytes)
+            - for de10-nano its 8kb, those 8kb are saved by the recipe u-boot-socfpga-env.bb to uboot.env (+ symlinks)
+            - these are NOT part of the wic file, therefore they must be dded independently (sudo dd bs=1 count=8192 if=uboot.env skip=0 of=/dev/sda seek=17408)
+            - this boot environment can be overwritten by cmd "env save" (dumps the current env)
+            - if boot environment CRC is correct (e.g. a valid one is was flashed or saved and is found, it will replace completely the default (not just merge))
+      - SCRIPT: see u-boot-socfpga-scr for example -> modified environment to first search for scripts and execute them. Also boot with extlinux from the same script.
+    - how to patch sources of a recipe
+      - devtool modify <recipe>
+      - devtool update-recipe -a ../sources/meta-de10-nano <recipe> (from workspace directory)
+      - devtool reset <recipe>
+    - Kernel:
+      - add devicetree with patch + KERNEL_DEVICETREE (in local.conf)
+      - add config fragments also with .cfg patches (see https://docs.yoctoproject.org/kernel-dev/common.html#changing-the-configuration)
+      - [ ] add kernel modules
+    - Partition layout
+        - [ ] override WKS_FILE
 
 Issues:
 [x] our kernel is panicing on boot, could be an incompatibility between device tree and kernel version, we could add some logs to kernel or check crash addr -> wrong device tree
