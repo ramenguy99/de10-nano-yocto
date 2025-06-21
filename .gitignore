@@ -1,0 +1,12 @@
+# Build directory
+/build/cache
+/build/downloads
+/build/sstate-cache
+/build/tmp
+/build/workspace
+
+/build/conf/*.txt
+/build/conf/templateconf.cfg
+
+/build/pn-buildlist
+/build/*.log
