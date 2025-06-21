@@ -21,7 +21,6 @@ bootm_size=0xa000000
 cpu=armv7
 distro_bootcmd=for target in ${boot_targets}; do run bootcmd_${target}; done
 efi_dtb_prefixes=/ /dtb/ /dtb/current/
-fatscript=if fatload mmc 0:1 ${scriptaddr} ${scriptfile};then source ${scriptaddr}; fi
 fdt_addr_r=0x02000000
 fdtfile=socfpga_cyclone5_de10_nano.dtb
 kernel_addr_r=0x01000000
@@ -29,7 +28,6 @@ load_efi_dtb=load ${devtype} ${devnum}:${distro_bootpart} ${fdt_addr_r} ${prefix
 loadaddr=0x01000000
 mmc_boot=if mmc dev ${devnum}; then devtype=mmc; run scan_dev_for_boot_part; fi
 mtdids=nor0=ff705000.spi.0
-prog_core=if load mmc 0:1 ${loadaddr} fit_spl_fpga.itb;then fpga loadmk 0 ${loadaddr}:fpga-core-1; fi
 pxefile_addr_r=0x02200000
 ramdisk_addr_r=0x02300000
 scan_dev_for_boot=echo Scanning ${devtype} ${devnum}:${distro_bootpart}...; for prefix in ${boot_prefixes}; do run scan_dev_for_scripts; run scan_dev_for_extlinux; done;run scan_dev_for_efi;
