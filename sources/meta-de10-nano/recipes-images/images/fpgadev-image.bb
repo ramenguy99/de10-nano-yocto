@@ -22,7 +22,16 @@ IMAGE_ROOTFS_EXTRA_SPACE:append = " ${@bb.utils.contains("DISTRO_FEATURES", "sys
 
 # Customizations
 IMAGE_FEATURES:append = " allow-empty-password empty-root-password"
-IMAGE_INSTALL:append = " mtd-utils"
+IMAGE_INSTALL:append = "\
+    mtd-utils \
+"
+
+CORE_IMAGE_EXTRA_INSTALL += "\
+    packagegroup-base \
+    packagegroup-base-usbgadget \
+    packagegroup-basic \
+    kernel-modules \
+"
 
 # refdes customizations
 # RBO_RELEASE_VER = "2025.04"

@@ -81,11 +81,37 @@ bitbake console-image-minimal
       - add config fragments also with .cfg patches (see https://docs.yoctoproject.org/kernel-dev/common.html#changing-the-configuration)
       - [ ] add kernel modules
     - Partition layout
-        - [ ] override WKS_FILE
+        - override WKS_FILE
+    - FPGA bridges:
+      - 4 bridges:
+        - hps2fpga    -> low latency MMIO HPS to FPGA
+        - fpga2hps    -> low latency writebacks FPGA to HPS
+        - lwhps2fpga  -> high latency MMIO HPS to FPGA
+        - fpga2sdram  -> direct connection to sdram FPGA to SDRAM
+      - Must be enabled in devicetree -> results in register writes and io mapping
+    - Network over USB
+      - Two options:
+        - Default configuration usb config 
+          - CONFIG_USB_G_NCM=y in .cfg file (bbappend to your kernel)
+          - usb0 is automatically created on boot
+        - USB configuration through configfs (hard mode)
+          - USB controller that supports this -> can be see in /sys/class/udc (usb device controller)
+          - Confguration in configfs tree (/sys/kernel/config) -> ids, functions etc.., UDC is then bound to this configuration
+          - Various kernel config options and module required depending on function
+      - Systemd .network file can be used for network configuration configure DHCP / DNS etc..
+  
+FPGA:
+- [x] Add custom LED design to control 8 LEDs
+- [x] LED 0 is following clock, change to follow value written by HPS
+- [ ] Continue following tutorials
+  - [ ] kernel module
+  - [ ] adder
+  - [ ] dma?
+- [ ] Explore CD samples, project structure and source
 
 Issues:
 [x] our kernel is panicing on boot, could be an incompatibility between device tree and kernel version, we could add some logs to kernel or check crash addr -> wrong device tree
-  [ ] currently we have only the devkit in the device tree. Likely want some kind of overlay / override depending on FPGA design, but what the tool generates seems to be off.
+[x] currently we have only the devkit in the device tree. Likely want some kind of overlay / override depending on FPGA design, but what the tool generates seems to be off -> now using full custom dtb
+[x] uboot does not have ethaddr set in env, figure out best way to add it
+[x] uboot not doing anything on boot and just drops into sheel, we would expect it to first run the script and then boot, figure out why.
 
-- uboot does not have ethaddr set in env, figure out best way to add it
-- uboot not doing anything on boot and just drops into sheel, we would expect it to first run the script and then boot, figure out why.

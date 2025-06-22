@@ -13,7 +13,7 @@ new file mode 100644
 index 000000000000..1ec91f4bc453
 --- /dev/null
 +++ b/arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts
-@@ -0,0 +1,111 @@
+@@ -0,0 +1,130 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright Altera Corporation (C) 2015. All rights reserved.
@@ -124,4 +124,23 @@ index 000000000000..1ec91f4bc453
 +
 +&usb1 {
 +	status = "okay";
++};
++&fpga_bridge0 {
++  status = "okay";
++  bridge-enable = <1>;
++};
++
++&fpga_bridge1 {
++  status = "okay";
++  bridge-enable = <1>;
++};
++
++&fpga_bridge2 {
++  status = "okay";
++  bridge-enable = <1>;
++};
++
++&fpga_bridge3 {
++  status = "okay";
++  bridge-enable = <1>;
 +};
