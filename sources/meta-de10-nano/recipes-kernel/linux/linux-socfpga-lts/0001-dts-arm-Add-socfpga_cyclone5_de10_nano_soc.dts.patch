@@ -13,7 +13,7 @@ new file mode 100644
 index 000000000000..1ec91f4bc453
 --- /dev/null
 +++ b/arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts
-@@ -0,0 +1,130 @@
+@@ -0,0 +1,136 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright Altera Corporation (C) 2015. All rights reserved.
@@ -65,6 +65,12 @@ index 000000000000..1ec91f4bc453
 +			debounce-interval = <50>;
 +		};
 +	};
++
++   custom_leds_0: leds@0xff200000 {
++       compatible = "dev,custom-leds";
++       reg = <0xff200000 0x000008>;
++       clocks = <&l4_main_clk>;
++   };
 +};
 +
 +&gmac1 {
