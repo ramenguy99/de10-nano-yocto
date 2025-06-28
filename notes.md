@@ -103,6 +103,9 @@ bitbake console-image-minimal
 FPGA:
 - [x] Add custom LED design to control 8 LEDs
 - [x] LED 0 is following clock, change to follow value written by HPS
+- [ ] Device tree
+  - [ ] Try to make an LED controller with syscon + led
+  - [ ] Make my own driver for it instead
 - [ ] Continue following tutorials
   - [ ] kernel module
   - [ ] adder

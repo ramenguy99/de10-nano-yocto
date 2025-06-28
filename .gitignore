@@ -11,3 +11,5 @@
 /build/pn-buildlist
 /build/*.log
 /build/*.lock
+
+/backup
