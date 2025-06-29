@@ -13,3 +13,17 @@
 /build/*.lock
 
 /backup
+
+/fpga/ghrd
+
+# Quartus files
+*.qws
+*.rbf
+*.txt
+*.sopcinfo
+/fpga/*/db
+/fpga/*/.qsys_edit
+/fpga/*/soc_system
+/fpga/*/output_files
+/fpga/*/incremental_db
+/fpga/*/hps_isw_handoff
