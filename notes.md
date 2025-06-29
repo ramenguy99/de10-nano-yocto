@@ -99,17 +99,60 @@ bitbake console-image-minimal
           - Confguration in configfs tree (/sys/kernel/config) -> ids, functions etc.., UDC is then bound to this configuration
           - Various kernel config options and module required depending on function
       - Systemd .network file can be used for network configuration configure DHCP / DNS etc..
+    - IRQs:
+      - cat /proc/interrupts -> number on left, chip name + number on right
+      - "interrupt-controller" in device tree specifies a controller
+        - "#interrupt-cells" specifies how many numbers needed to specify an interrupt
+        - description usually in devicetree binding docs in kernel source
+        - for de10 nano we use cortex-a9-gic which has 3 address cells
+          - type: 
+            - 0: SPI (shared processor interrupt)
+            - 1: PPI (per processor interrupt)
+            - 2: SGI (software generated interrupt)
+          - number (controller number)
+          - flags:
+            - 1: edge low-to-high
+            - 2: edge high-to-low (no SPI)
+            - 4: level high
+            - 8: level low (no SPI)
+        - nodes that use a controller specify "interrupt-parent", for us specified at soc level, inherited by child nodes.
+        - each device specifies this in "interrupts"
+      - kernel represents irqs with the following types:
+        - irq_data:
+          - irq number
+          - irq_chip*
+          - irq_domain*
+        - irq_desc: 
+          - irq_data
+      - on the cyclone 5 interrupt numbers are described in chapter 10-13 (Generic Interrupt Controller)
+      - interrupt number 72-135 are dedicated for fpga (Level or edge)
+        and map to fpga-hps-irq0 (0-31) and fpga-hps-irq1(32-63)
+      - example dt:
+      ```
+        / {
+            soc{
+              mysoftip {
+                compatible="mysoftip";
+                interrupts=<GIC_SPI 40 IRQ_TYPE_EDGE_RISING>;
+                // interrupts=<0 40 1>;
+              };
+            };
+        };
+      ```
   
 FPGA:
 - [x] Add custom LED design to control 8 LEDs
 - [x] LED 0 is following clock, change to follow value written by HPS
-- [ ] Device tree
-  - [ ] Try to make an LED controller with syscon + led
-  - [ ] Make my own driver for it instead
-- [ ] Continue following tutorials
-  - [ ] kernel module
-  - [ ] adder
-  - [ ] dma?
+- [x] Device tree
+  - [x] Try to make an LED controller with syscon + led -> does
+  - [x] Make my own driver for it instead
+- [x] Continue following tutorials
+  - [x] kernel module
+  - [x] interrupts: compare with ghrd to try and understand what we are missing for the interrupt
+                    to be triggered. From devicetree / kernel module side i think we are good
+        - ensure bus writes go through avalon adapter (maybe was not working before due to wrong bus?)
+        - ensure irq masks are enabled and irqs are cleared after handling
+  - [ ] dma
 - [ ] Explore CD samples, project structure and source
 
 Issues:

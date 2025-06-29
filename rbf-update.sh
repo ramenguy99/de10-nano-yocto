@@ -11,7 +11,9 @@ ssh fpga mount /dev/mmcblk0p2 /mnt
 scp fpga:/mnt/soc_system.rbf  ${SCRIPT_DIR}/backup/$(date +"%Y%m%d-%H%M%S")_soc_system.rbf
 
 # Overwrite existing
-scp /work/de10-nano/devkit/cd/Demonstrations/SoC_FPGA/DE10_NANO_SoC_GHRD/custom_leds_8.rbf fpga:/mnt/soc_system.rbf
+RBF=${SCRIPT_DIR}/fpga/ghrd/button.rbf
+
+scp ${RBF} fpga:/mnt/soc_system.rbf
 ssh fpga ls -l /mnt
 
 # Cleanup

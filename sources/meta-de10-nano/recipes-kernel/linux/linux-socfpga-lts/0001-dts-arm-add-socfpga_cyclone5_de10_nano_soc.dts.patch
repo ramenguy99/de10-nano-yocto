@@ -1,25 +1,27 @@
-From faaa718f62cd8eb982737de6916c9c8342fcdf69 Mon Sep 17 00:00:00 2001
+From ed07f5b3ad9e0c57c551c17958de11cb3ded2fd9 Mon Sep 17 00:00:00 2001
 From: Dario Mylonopoulos <dmylos@yahoo.it>
 Date: Sat, 21 Jun 2025 19:49:52 +0200
-Subject: [PATCH] dts: arm: Add socfpga_cyclone5_de10_nano_soc.dts
+Subject: [PATCH] dts: arm: add socfpga_cyclone5_de10_nano_soc.dts
 
 ---
- .../socfpga_cyclone5_de10_nano_soc.dts        | 111 ++++++++++++++++++
- 1 file changed, 111 insertions(+)
+ .../socfpga_cyclone5_de10_nano_soc.dts        | 146 ++++++++++++++++++
+ 1 file changed, 146 insertions(+)
  create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts
 
 diff --git a/arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts b/arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts
 new file mode 100644
-index 000000000000..1ec91f4bc453
+index 000000000000..c2531a4ea368
 --- /dev/null
 +++ b/arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_soc.dts
-@@ -0,0 +1,136 @@
+@@ -0,0 +1,146 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright Altera Corporation (C) 2015. All rights reserved.
 + */
 +
 +#include "socfpga_cyclone5.dtsi"
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
 +
 +/ {
 +	model = "Terasic DE10-Nano";
@@ -66,10 +68,18 @@ index 000000000000..1ec91f4bc453
 +		};
 +	};
 +
-+   custom_leds_0: leds@0xff200000 {
-+       compatible = "dev,custom-leds";
-+       reg = <0xff200000 0x000008>;
-+       clocks = <&l4_main_clk>;
++   // custom_leds_0: leds@0xff200000 {
++   //     compatible = "dev,custom-leds";
++   //     reg = <0xff200000 0x000008>;
++   //     clocks = <&l4_main_clk>;
++   // };
++
++   soc {
++       custom_button {
++           compatible="dev,custom-button";
++           reg = <0xff200000 0x000010>;
++           interrupts = <GIC_SPI 40 IRQ_TYPE_EDGE_RISING>;
++       };
 +   };
 +};
 +
