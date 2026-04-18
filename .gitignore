@@ -21,6 +21,7 @@
 *.rbf
 *.txt
 *.sopcinfo
+*.rpt
 /fpga/*/db
 /fpga/*/.qsys_edit
 /fpga/*/soc_system
