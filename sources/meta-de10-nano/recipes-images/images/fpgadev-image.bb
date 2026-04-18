@@ -2,6 +2,8 @@ require recipes-core/images/core-image-base.bb
 
 export IMAGE_BASENAME = "fpgadev-image"
 
+# Set this here because it depends on u-boot-socfpga-env and u-boot-socfpga-scr which are not part of any image (see below).
+WKS_FILE:cyclone5 = "de10-nano.wks"
 IMAGE_FSTYPES = "wic wic.bmap"
 
 EXTRA_IMAGEDEPENDS:append = "\
@@ -9,10 +11,7 @@ EXTRA_IMAGEDEPENDS:append = "\
     u-boot-socfpga-env \
 "
 
-IMAGE_BOOT_FILES = " \
-    socfpga_cyclone5_de10_nano_soc.dtb \
-	${KERNEL_IMAGETYPE} \
-	extlinux.conf;extlinux/extlinux.conf \
+IMAGE_BOOT_FILES:append = " \
     u-boot.scr \
 	"
 
