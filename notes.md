@@ -20,6 +20,15 @@
 bitbake console-image-minimal
 ```
 
+## Quartus instructions
+
+- Download and install Quartus from: https://www.altera.com/downloads/fpga-development-tools/quartus-prime-lite-edition-design-software-version-25-1-linux
+- Open quartus `.qpf` project
+- Open platform designer and generate the system design from the `.qsys`.
+- Run up to the Assembler step
+- Export programming file: File > Convert Programming files > set type to `.rbf`> select Passive Parallel x8 > Select SOF Data in table > Add file > Select `output_files/DE10_NANO_SoC_GHRD.sof` > Generate
+
+
 ## Notes:
 
 ### Build issues:
