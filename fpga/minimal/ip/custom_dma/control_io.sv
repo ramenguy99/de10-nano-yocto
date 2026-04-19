@@ -27,4 +27,18 @@ module control_io (
   output logic interrupt_sender_irq
 );
 
+always_comb begin
+  interrupt_sender_irq = 1'b0;
+  avm_m0_write = 1'b1;
+end
+
+always_ff @(posedge clk ) begin
+  avm_m0_read = ~avm_m0_read;
+  // avm_m0_read = ~avm_m0_read;
+
+  if (reset) begin
+      avm_m0_read = 1'b0;
+  end
+end
+
 endmodule

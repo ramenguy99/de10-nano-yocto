@@ -1,0 +1,7 @@
+cocotb==2.0.1
+find-libpython==0.5.1
+iniconfig==2.3.0
+packaging==26.1
+pluggy==1.6.0
+pygments==2.20.0
+pytest==9.0.3

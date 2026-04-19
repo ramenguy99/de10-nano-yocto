@@ -29,3 +29,8 @@
 /fpga/*/output_files
 /fpga/*/incremental_db
 /fpga/*/hps_isw_handoff
+
+# TB
+__pycache__
+sim_build
+results.xml
