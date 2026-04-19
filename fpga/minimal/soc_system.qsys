@@ -21,7 +21,7 @@
    {
       datum baseAddress
       {
-         value = "16";
+         value = "64";
          type = "String";
       }
    }
@@ -160,6 +160,11 @@
  <interface name="hps_0_h2f_user0_clock" internal="hps_0.h2f_user0_clock" />
  <interface name="hps_0_hps_io" internal="hps_0.hps_io" />
  <interface name="memory" internal="hps_0.memory" type="conduit" dir="end" />
+ <interface
+   name="out_data"
+   internal="CustomDMA_0.out_data"
+   type="conduit"
+   dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
  <module name="CustomDMA_0" kind="CustomDMA" version="1.0" enabled="1" />
  <module name="button_pio" kind="altera_avalon_pio" version="25.1" enabled="1">
@@ -752,7 +757,7 @@
    start="mm_bridge_0.m0"
    end="CustomDMA_0.control_s0">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0010" />
+  <parameter name="baseAddress" value="0x0040" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
