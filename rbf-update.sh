@@ -11,7 +11,7 @@ ssh fpga mount /dev/mmcblk0p2 /mnt
 scp fpga:/mnt/soc_system.rbf  ${SCRIPT_DIR}/backup/$(date +"%Y%m%d-%H%M%S")_soc_system.rbf
 
 # Overwrite existing
-RBF=${SCRIPT_DIR}/fpga/ghrd/button.rbf
+RBF=${SCRIPT_DIR}/fpga/minimal/soc_system.rbf
 
 scp ${RBF} fpga:/mnt/soc_system.rbf
 ssh fpga ls -l /mnt

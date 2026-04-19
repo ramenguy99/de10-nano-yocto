@@ -3,6 +3,7 @@ if test -e mmc 0:2 soc_system.rbf; then
     echo -- FOUND soc_system.rbf --;
     load mmc 0:2 ${loadaddr} soc_system.rbf;
     fpga load 0 ${loadaddr} $filesize;
+    bridge enable
 else
     echo -- NOT FOUND soc_system.rbf --;
 fi;
