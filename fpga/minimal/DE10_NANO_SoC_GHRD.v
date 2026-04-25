@@ -42,6 +42,9 @@ module DE10_NANO_SoC_GHRD(
 //=======================================================
 wire hps_fpga_reset_n;
 wire     [1: 0]     fpga_debounced_buttons;
+
+wire     [255: 0]   out_data;
+
 // wire     [7: 2]     fpga_led_internal;
 wire     [2: 0]     hps_reset_req;
 wire                hps_cold_reset;
@@ -81,6 +84,7 @@ soc_system u0(
                
 					// FPGA
                .button_pio_external_connection_export(fpga_debounced_buttons), // button_pio_external_connection.export
+               .out_data_readdata(out_data),
                
 					// HPS Reset
 					.hps_0_h2f_reset_reset_n(hps_fpga_reset_n),                  //                hps_0_h2f_reset.reset_n
@@ -154,7 +158,8 @@ always @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
 end
 
 assign LED[0] = led_level;
-assign LED[5: 4] = fpga_debounced_buttons;
+assign LED[2:1] = fpga_debounced_buttons;
+assign LED[7:4] = out_data[3:0];
 
 
 endmodule

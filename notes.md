@@ -244,16 +244,17 @@ FPGA:
       a second address. It's not clear if this behavior is allowed only when pipeline reads are allowed or if this
       also apply to normal transactions.
     - The de10 nano tutorials only hold read for 1 cycle and immediately drop if wait request is not set (Option 2), but this is also with pipelined reads available.
-  - [ ] Finish read validation with waits
-  - [ ] Build and flash design isolating some physical memory through kernel command line
-  - [ ] Write simple kernel driver to write addresses and triggers on probe
+  - [x] Build and flash design
+  - [x] Write simple kernel driver to write addresses and triggers on probe
   - [ ] Implement and validate FPGA writes to SDRAM
+  - [ ] Finish read validation with waits
   - [ ] Create full async memcpy engine (trigger + interrupt)
   - [ ] Allow userspace to trigger memcpy and poll for changes
     - [ ] Alloc pinned memory and mmap
     - [ ] configure through ioctls
     - [ ] events on interrupt
   - [ ] Benchmark memcpy before and after burst read/write transactions (compare with CPU memcpy)
+- [ ] Find right way to script and run build (up to .rbf file) from CLI
 - [ ] Explore CD samples, project structure and source
 - [ ] Explore Ethernet MACs and their drivers
 

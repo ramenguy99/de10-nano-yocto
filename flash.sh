@@ -8,7 +8,7 @@ sudo bmaptool copy ${SCRIPT_DIR}/build/tmp/deploy/images/cyclone5/fpgadev-image-
 sleep 0.5
 sudo mount /dev/sda2 /mnt
 ls -l /mnt
-sudo cp /work/de10-nano/devkit/cd/Demonstrations/SoC_FPGA/DE10_NANO_SoC_GHRD/soc_system_sus.rbf /mnt/soc_system.rbf
+sudo cp $SCRIPT_DIR/fpga/minimal/soc_system.rbf /mnt/soc_system.rbf
 cat /mnt/extlinux/extlinux.conf
 cat /mnt/u-boot.scr
 sudo umount /mnt
