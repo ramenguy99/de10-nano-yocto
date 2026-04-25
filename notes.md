@@ -232,6 +232,28 @@ FPGA:
                     to be triggered. From devicetree / kernel module side i think we are good
         - ensure bus writes go through avalon adapter (maybe was not working before due to wrong bus?)
         - ensure irq masks are enabled and irqs are cleared after handling
+- [ ] SDRAM DMA:
+  - Avalon MM notes:
+    - Did not find a clean way to do the byte-host word-agent address translation for testbench directly in cocotb:
+      - used an adapter, somehow the address signal splicing only works in iverilgo 13 (and not 12) or in verilator
+    - It's still unclear to me exactly how waitrequest works in the normal transaction:
+      Option 1: host has to hold the read and write at least 2 rising edges (first to start transaction, 2nd to check if wait request was raised by host).
+      Option 2: host can already drop the read signal if waitrequest is not raised on the 2nd risign edge, but this
+      means that waitrequest has to be set between rising edges by the agent.
+    - During pipeline reads it seems clear that if waitrequest is not raised between cycles you can already pipeline
+      a second address. It's not clear if this behavior is allowed only when pipeline reads are allowed or if this
+      also apply to normal transactions.
+    - The de10 nano tutorials only hold read for 1 cycle and immediately drop if wait request is not set (Option 2), but this is also with pipelined reads available.
+  - [ ] Finish read validation with waits
+  - [ ] Build and flash design isolating some physical memory through kernel command line
+  - [ ] Write simple kernel driver to write addresses and triggers on probe
+  - [ ] Implement and validate FPGA writes to SDRAM
+  - [ ] Create full async memcpy engine (trigger + interrupt)
+  - [ ] Allow userspace to trigger memcpy and poll for changes
+    - [ ] Alloc pinned memory and mmap
+    - [ ] configure through ioctls
+    - [ ] events on interrupt
+  - [ ] Benchmark memcpy before and after burst read/write transactions (compare with CPU memcpy)
 - [ ] Explore CD samples, project structure and source
 - [ ] Explore Ethernet MACs and their drivers
 

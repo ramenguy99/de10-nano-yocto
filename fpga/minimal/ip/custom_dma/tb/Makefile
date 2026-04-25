@@ -1,12 +1,19 @@
 # defaults
 SIM ?= icarus
+
+# SIM ?= verilator
+# EXTRA_ARGS += --trace --trace-fst --trace-structs
+
 TOPLEVEL_LANG ?= verilog
 
-VERILOG_SOURCES += $(PWD)/../control_io.sv
+VERILOG_SOURCES += \
+	$(PWD)/../control_io.sv \
+	$(PWD)/avalon_address_adapter.sv
+
 # use VHDL_SOURCES for VHDL files
 
 # COCOTB_TOPLEVEL is the name of the toplevel module in your Verilog or VHDL file
-COCOTB_TOPLEVEL = control_io
+COCOTB_TOPLEVEL = avalon_address_adapter
 
 # COCOTB_TEST_MODULES is the basename of the Python test file(s)
 COCOTB_TEST_MODULES = test_control_io

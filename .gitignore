@@ -19,7 +19,6 @@
 # Quartus files
 *.qws
 *.rbf
-*.txt
 *.sopcinfo
 *.rpt
 *.tcl~
@@ -29,6 +28,7 @@
 /fpga/*/output_files
 /fpga/*/incremental_db
 /fpga/*/hps_isw_handoff
+/fpga/**/*.txt
 
 # TB
 __pycache__
