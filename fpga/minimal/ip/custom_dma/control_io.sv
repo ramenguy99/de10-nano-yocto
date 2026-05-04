@@ -57,6 +57,7 @@ end
 localparam INIT = 2'd0;
 localparam READ_START = 2'd1;
 localparam READ_END = 2'd2;
+localparam WRITE = 2'd3;
 
 logic [1:0] cur_state;
 logic [1:0] next_state;
@@ -76,6 +77,11 @@ always_comb begin
 
     READ_END: begin
       if (!avm_m0_readdatavalid) next_state = READ_END; // Wait here.
+      else next_state = WRITE;
+    end
+
+    WRITE: begin
+      if (avm_m0_waitrequest) next_state = WRITE; // Wait here.
       else next_state = INIT;
     end
 
@@ -90,10 +96,11 @@ always_ff @(posedge clk ) begin
   else cur_state <= next_state;
 end
 
-// Avalon master read
+// Avalon master read/write
 always_comb begin
   avm_m0_address = 32'd0;
   avm_m0_read = 1'b0;
+  avm_m0_write = 1'b0;
   avm_m0_byteenable = 32'd0;
   avm_m0_burstcount = 11'd0;
 
@@ -104,6 +111,14 @@ always_comb begin
       avm_m0_read = 1'b1;
       avm_m0_byteenable = 32'h0000_000F; // Get 32 bits only.
       avm_m0_burstcount = 11'd1; // Get only 1 address value.
+    end
+
+    WRITE: begin
+      avm_m0_address = sdram_write_addr;
+      avm_m0_write = 1'b1;
+      avm_m0_byteenable = 32'h0000_000F; // Write 32 bits only.
+      avm_m0_burstcount = 11'd1; // Get only 1 address value.
+      avm_m0_writedata = out_data;
     end
 
     default: begin

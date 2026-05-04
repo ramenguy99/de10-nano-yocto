@@ -18,9 +18,9 @@ async def cycle_reset(dut):
     await RisingEdge(dut.clk)
 
 @cocotb.test()
-async def custom_dma_test_old(dut):
-    READ_ADDRESS = 0x0000ce00
-    WRITE_ADDRESS = 0x000babe
+async def custom_dma_test(dut):
+    READ_ADDRESS = 0x0000ca00
+    WRITE_ADDRESS = 0x000ba00
 
     # Clock
     log = logging.getLogger("cocotb.tb")
@@ -29,10 +29,11 @@ async def custom_dma_test_old(dut):
 
     hps2fpga = AvalonMaster(AvalonBus.from_prefix(dut, "avs_s0"), dut.clk, dut.reset)
     sdram = AvalonRam(AvalonBus.from_prefix(dut, "avm_m0"), dut.clk, dut.reset, size=64 * 1024)
-    sdram.bus.readdatavalid.value = 1
+    sdram.bus.readdatavalid.value = 0
     sdram.bus.waitrequest.value = 0
-    sdram.write(READ_ADDRESS, bytes(range(1, 33)))
 
+    msg = bytes(range(1, 33))
+    sdram.write(READ_ADDRESS, msg)
 
     # Unwrap after address translation
     dut = dut.control_io
@@ -41,9 +42,9 @@ async def custom_dma_test_old(dut):
     await cycle_reset(dut)
 
     await hps2fpga.write_dword(0b0001 << 2, READ_ADDRESS)
-    assert dut.sdram_read_addr.value == READ_ADDRESS
-
     await hps2fpga.write_dword(0b0010 << 2, WRITE_ADDRESS)
+    await RisingEdge(dut.clk)
+    assert dut.sdram_read_addr.value == READ_ADDRESS
     assert dut.sdram_write_addr.value == WRITE_ADDRESS
 
     await hps2fpga.write_dword(0b0000 << 2, 1)
@@ -52,8 +53,14 @@ async def custom_dma_test_old(dut):
     await RisingEdge(dut.clk)
     sdram.bus.readdatavalid.value = 1
 
+    await RisingEdge(dut.clk)
+    await RisingEdge(dut.clk)
+    assert dut.out_data.value.to_bytes(byteorder="little") == msg
+    assert sdram.read_dword(WRITE_ADDRESS) == int.from_bytes(msg[:4], byteorder="little")
+
     # Drain
-    await Timer(10, unit="ns")
+    await RisingEdge(dut.clk)
+    await RisingEdge(dut.clk)
 
 """
 @cocotb.test()
